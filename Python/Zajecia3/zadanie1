@@ -1,0 +1,24 @@
+import random
+
+def generuj_liste():
+    dlugosc = random.randint(3, 10)  # Generuje listę o losowej długości (min. 3)
+    lista = [random.randint(1, 100) for _ in range(dlugosc)]
+    return lista
+
+lista = generuj_liste()
+
+
+def wyswietl_argumenty(**kwargs):
+    for nazwa, wartosc in kwargs.items():
+        print(f"{nazwa}: {wartosc}")
+
+
+def wyswietl_okreslone_argumenty(nazwy, **kwargs):
+    for nazwa in nazwy:
+        if nazwa in kwargs:
+            print(f"{nazwa}: {kwargs[nazwa]}")
+
+
+wyswietl_argumenty(imie="Jan", wiek=30, miasto="Kraków")
+wypisane_nazwy = ["wiek", "miasto"]
+wyswietl_okreslone_argumenty(wypisane_nazwy, imie="Jan", wiek=30, miasto="Kraków")

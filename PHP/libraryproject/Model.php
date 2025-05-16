@@ -31,7 +31,7 @@ abstract class Model {
         error_log("Saving data: " . print_r($this->data, true));
 
         if (isset($this->data['Id']) && !empty($this->data['Id'])) {
-            // Update
+          
             $this->data['EditDateTime'] = $now;
             $sets = [];
             foreach ($this->data as $key => $value) {
@@ -41,7 +41,7 @@ abstract class Model {
             }
             $sql = "UPDATE {$this->table} SET " . implode(', ', $sets) . " WHERE Id = :Id";
         } else {
-            // Insert
+         
             $this->data['CreationDateTime'] = $now;
             $this->data['EditDateTime'] = $now;
             $this->data['IsActive'] = 1;
@@ -53,10 +53,10 @@ abstract class Model {
         error_log("SQL Query: " . $sql);
 
         try {
-            $stmt = self::$db->prepare($sql);
-            $result = $stmt->execute($this->data);
+            $preparedSql = self::$db->prepare($sql);
+            $result = $preparedSql->execute($this->data);
             if (!$result) {
-                error_log("SQL Error: " . implode(", ", $stmt->errorInfo()));
+                error_log("SQL Error: " . implode(", ", $preparedSql->errorInfo()));
             }
             return $result;
         } catch (PDOException $e) {
@@ -66,9 +66,9 @@ abstract class Model {
     }
 
     public function find($id) {
-        $stmt = self::$db->prepare("SELECT * FROM {$this->table} WHERE Id = :id AND IsActive = 1");
-        $stmt->execute(['id' => $id]);
-        $result = $stmt->fetch();
+        $preparedSql = self::$db->prepare("SELECT * FROM {$this->table} WHERE Id = :id AND IsActive = 1");
+        $preparedSql->execute(['id' => $id]);
+        $result = $preparedSql->fetch();
         if ($result) {
             $this->data = $result;
             return true;
@@ -77,14 +77,14 @@ abstract class Model {
     }
 
     public function findAll() {
-        $stmt = self::$db->prepare("SELECT * FROM {$this->table} WHERE IsActive = 1 ORDER BY CreationDateTime DESC");
-        $stmt->execute();
-        return $stmt->fetchAll();
+        $preparedSql = self::$db->prepare("SELECT * FROM {$this->table} WHERE IsActive = 1 ORDER BY CreationDateTime DESC");
+        $preparedSql->execute();
+        return $preparedSql->fetchAll();
     }
 
     public function delete($id) {
-        $stmt = self::$db->prepare("UPDATE {$this->table} SET IsActive = 0 WHERE Id = :id");
-        return $stmt->execute(['id' => $id]);
+        $preparedSql = self::$db->prepare("UPDATE {$this->table} SET IsActive = 0 WHERE Id = :id");
+        return $preparedSql->execute(['id' => $id]);
     }
 
     public function getData() {

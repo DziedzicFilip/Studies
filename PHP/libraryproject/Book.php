@@ -14,7 +14,7 @@ class Book extends Model {
             $errors[] = "Autor jest wymagany";
         }
         if (!empty($data['PublishYear'])) {
-            if (!is_numeric($data['PublishYear']) || $data['PublishYear'] < 1000 || $data['PublishYear'] > date('Y')) {
+            if (!is_numeric($data['PublishYear'])  || $data['PublishYear'] > date('Y')) {
                 $errors[] = "Rok wydania jest nieprawidłowy";
             }
         }

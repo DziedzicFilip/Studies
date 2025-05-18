@@ -9,8 +9,7 @@ class InternalEventsController extends Controller
 {
     public function index()
     {
-        $models = InternalEvent::where("IsActive", "=",true)->get();
-           
+        $models = InternalEvent::where('IsActive', true)->get();
        return view("internalEvent.index", [
     'models' => $models,
 ]);
@@ -36,46 +35,76 @@ class InternalEventsController extends Controller
         $model->IsPublic = $request->input("IsPublic") ? true : false;
         $model->IsCancelled = $request->input("IsCancelled") ? true : false;
         $model->save();
- 
+
+     
+        if ($request->has('attachments')) {
+            $pivotData = [];
+            foreach ($request->input('attachments') as $attachmentId) {
+                $attachment = \App\Models\Attachment::find($attachmentId);
+                $pivotData[$attachmentId] = [
+                    'Title' => $attachment ? $attachment->Title : ''
+                ];
+            }
+            $model->attachments()->sync($pivotData);
+        } else {
+            
+            $model->attachments()->sync([]);
+        }
+
         return redirect('/internal-events');
     }
-     public function delete($id, Request $request){
-        $model = InternalEvent::find($id);
-         $model->IsActive = false; 
+
+    public function create(){
+        $model=new InternalEvent();
+        $model -> EventDateTime = date("Y-m-d");
+        $model -> PublishDateTime = date("Y-m-d");
+        return view("internalEvent.create", ["model"=> $model]);
+    }
+
+public function addToDB(Request $request){
+        $model = new InternalEvent();
+        $model->Title = $request->input("Title");
+        $model->Link = $request->input("Link");
+        $model->ShortDescription = $request->input("ShortDescription");
+        $model->ContentHTML = $request->input("ContentHTML");
+        $model->MetaTags = $request->input("MetaTags");
+        $model->MetaDescription = $request->input("MetaDescription");
+        $model->Notes = $request->input("Notes");
+        $model->EventDateTime = $request->input("EventDateTime");
+        $model->PublishDateTime = $request->input("PublishDateTime");
+        $model->IsPublic = $request->input("IsPublic") ? true : false;
+        $model->IsCancelled = $request->input("IsCancelled") ? true : false;
+        $model->IsActive = true;
         $model->save();
+
+        if ($request->has('attachments')) {
+            $pivotData = [];
+            foreach ($request->input('attachments') as $attachmentId) {
+                $attachment = \App\Models\Attachment::find($attachmentId);
+                $pivotData[$attachmentId] = [
+                    'Title' => $attachment ? $attachment->Title : ''
+                ];
+            }
+            $model->attachments()->sync($pivotData);
+        }
+
         return redirect('/internal-events');
     }
-    public function showDelete($id)
+        public function showDelete($id)
 {
     $model = InternalEvent::findOrFail($id);
     return view('internalEvent.delete', ['model' => $model]);
 }
-    public function create()
-    {
-        $model = new InternalEvent();
-        $model->EventDateTime = date("Y-m-d");
-        $model->PubishDateTime = date("Y-m-d");
-        return view("internalEvent.create",["model"=>$model]);
-    }
-   public function addToDB(Request $request)
-{
-    $model = new InternalEvent();
-    $model->Title = $request->input("Title");
-    $model->Link = $request->input("Link");
-    $model->ShortDescription = $request->input("ShortDescription");
-    $model->ContentHTML = $request->input("ContentHTML");
-    $model->MetaTags = $request->input("MetaTags");
-    $model->MetaDescription = $request->input("MetaDescription");
-    $model->Notes = $request->input("Notes");
-    $model->EventDateTime = $request->input("EventDateTime");
-    $model->PublishDateTime = $request->input("PublishDateTime");
-    $model->IsPublic = $request->input("IsPublic") ? true : false;
-    $model->IsCancelled = $request->input("IsCancelled") ? true : false;
-    $model->IsActive = true; 
-    $model->CreationDateTime = now();
-    $model->EditDateTime = now();
+ public function delete($id, Request $request){
+    $model = InternalEvent::findOrFail($id);
+    $model->IsActive = false; 
     $model->save();
-
     return redirect('/internal-events');
 }
+    public function show($id)
+    {
+        $model = InternalEvent::with('attachments')->findOrFail($id);
+        // $model->attachments zawiera powiązane załączniki
+        return view('internalEvent.show', compact('model'));
+    }
 }

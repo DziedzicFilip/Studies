@@ -1,35 +1,28 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="pl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>
-    {{$title ?? 'Laravel page'}} 
-</title>
-<link rel="stylesheet" href="/css/bootstrap.min.css" />
-<link
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
  
-href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+
-Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-rel="stylesheet">
+  <title>@yield('title','My App')</title>
+ 
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  >
+ 
 </head>
 <body>
-<div class="container">
-<div class="row">
-<div class="col-sm-12">
-<h1>Laravel page</h1>
-</div>
-</div>
-<div class="row">
-<div class="col sm-12">
-            @yield("menu")
-</div>
-</div>
-</div>
-<hr>
-@yield('content')
+  @yield('menu')
+  @yield('content')
  
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  ></script>
  
-<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

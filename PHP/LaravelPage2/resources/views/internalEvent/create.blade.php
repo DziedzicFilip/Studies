@@ -63,6 +63,16 @@
             <textarea id="Notes" name="Notes" class="form-control" rows="2">{{ $model->Notes }}</textarea>
         </div>
  
+        <div class="mb-3">
+            <label for="attachments">Powiąż załączniki</label>
+            <select class="form-select" id="attachments" name="attachments[]" multiple>
+                @foreach(\App\Models\Attachment::all() as $attachment)
+                    <option value="{{ $attachment->Id }}">{{ $attachment->Title }}</option>
+                @endforeach
+            </select>
+            <small class="form-text text-muted">Przytrzymaj Ctrl, aby wybrać wiele.</small>
+        </div>
+ 
         <button type="submit" class="btn btn-primary">Zapisz</button>
         <a href="/internal-events" class="btn btn-secondary">Anuluj</a>
     </form>

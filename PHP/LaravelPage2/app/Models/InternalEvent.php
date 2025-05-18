@@ -15,4 +15,16 @@ class InternalEvent extends Model
     protected $primaryKey = 'Id';
     public $timestamps = true;
     protected $guarded = [];
+
+
+
+public function attachments()
+{
+    return $this->belongsToMany(
+        Attachment::class,
+        'internaleventsattachments',
+        'InternalEventId',
+        'AttachmentId'
+    );
+}
 }

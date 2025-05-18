@@ -1,9 +1,9 @@
-@extends('main', ['title' => 'Edytuj wydarzenie'])
+@extends('main', ['title' => 'Dodaj wydarzenie'])
 @section('content')
 <div class="container mt-4">
-    <h2>Edytuj wydarzenie</h2>
+    <h2>Dodaj wydarzenie</h2>
  
-    <form method="POST" action="/internal-events/update/{{ $model->Id }}">
+    <form method="POST" action="/internal-events/add-to-db/{{ $model->Id }}">
         @csrf
  
         <div class="mb-3">
